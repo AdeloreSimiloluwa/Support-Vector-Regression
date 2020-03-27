@@ -1,0 +1,44 @@
+---
+title: "Support Vector Regression"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+data <- read_csv("Position_Salaries.csv")
+View(data)
+```
+
+```{r}
+data = data[ , 2:3]
+data
+```
+
+
+```{r}
+# Fitting the SVR model to the dataset
+library(e1071)
+regressor = svm(formula = Salary~ ., data = data , type = "eps-regression")
+```
+
+
+```{r}
+# predict with the new data
+y_pred = predict(regressor, data.frame(Level = 7.5))
+y_pred
+```
+
+This is a good prediction of the employee salary, now we know there is a high probability that the employee was saying the truth.
+
+```{r}
+#plot the data
+library(ggplot2)
+ggplot() +
+  geom_point(aes(x = data$Level ,y=data$Salary),color ="red") +
+  geom_line(aes(x = data$Level , y= predict(regressor, newdata = data)), color = "green")+
+  ggtitle("Truth or Bluff (SVR MODEL)")+ 
+  ylab("Salary")+ 
+  xlab("Levels")
+```
+
+
